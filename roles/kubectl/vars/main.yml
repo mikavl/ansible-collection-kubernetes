@@ -1,0 +1,15 @@
+---
+
+kubectl_architecture: "{{ {
+  'aarch64': 'arm64',
+  'x86_64': 'amd64',
+} [ansible_architecture] }}"
+kubectl_system: "{{ ansible_system | lower }}"
+kubectl_label: stable
+
+kubectl_binary_url: "https://dl.k8s.io/release/v{{ kubectl_version }}\
+  /bin/{{ kubectl_system }}/{{ kubectl_architecture }}/kubectl"
+kubectl_binary_dest: /usr/local/bin/kubectl
+kubectl_binary_checksum_type: sha256
+kubectl_binary_checksum_url: "{{ kubectl_binary_url }}.{{ kubectl_binary_checksum_type }}"
+kubectl_binary_checksum: "{{ lookup('ansible.builtin.url', kubectl_binary_checksum_url) }}"

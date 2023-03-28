@@ -1,0 +1,34 @@
+version = 2
+
+# Default seems to be:
+#
+#   disabled_plugins = ["cri"]
+#
+# Remove CRI from the disabled plugins list. See:
+#
+#   https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
+#
+
+disabled_plugins = []
+
+# Enable systemd cgroups, see:
+#
+#   https://github.com/containerd/containerd/issues/4203
+#
+# Note that "crictl info" will print
+#
+#   "systemdCgroup": false
+#
+# ...which is for the deprecated v1 runtime:
+#
+#   https://github.com/containerd/containerd/issues/4574
+#
+
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+            SystemdCgroup = true

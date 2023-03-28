@@ -1,0 +1,68 @@
+---
+
+- name: download containerd
+  ansible.builtin.get_url:
+    url: "{{ containerd_archive_url }}"
+    dest: "{{ containerd_archive_dest }}"
+    checksum: "{{ containerd_archive_checksum_type }}:{{ containerd_archive_checksum }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+
+- name: unarchive containerd
+  ansible.builtin.unarchive:
+    src: "{{ containerd_archive_dest }}"
+    dest: "{{ containerd_dir }}"
+    remote_src: True
+    extra_opts:
+      - --strip-components=1
+      - --wildcards
+      - bin/*
+    owner: root
+    group: root
+    mode: 0755
+  become: True
+  notify:
+    - restart containerd service
+
+- name: download containerd service
+  ansible.builtin.get_url:
+    url: "{{ containerd_service_url }}"
+    dest: "{{ containerd_service_dest }}"
+    force: True
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+  notify:
+    - restart containerd service
+
+- name: create containerd config dir
+  ansible.builtin.file:
+    path: "{{ containerd_config_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  become: True
+
+- name: configure containerd
+  ansible.builtin.template:
+    src: config.toml.j2
+    dest: "{{ containerd_config_dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+  notify:
+    - restart containerd service
+
+- meta: flush_handlers
+
+- name: enable and start containerd
+  ansible.builtin.systemd:
+    name: "{{ containerd_service_name }}"
+    state: started
+    enabled: True
+  become: True

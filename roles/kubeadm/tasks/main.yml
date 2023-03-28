@@ -1,0 +1,44 @@
+---
+
+- name: download kubeadm binary
+  ansible.builtin.get_url:
+    url: "{{ kubeadm_binary_url }}"
+    dest: "{{ kubeadm_binary_dest }}"
+    checksum: "{{ kubeadm_binary_checksum_type }}:{{ kubeadm_binary_checksum }}"
+    owner: root
+    group: root
+    mode: 0755
+  become: True
+
+- name: install kubeadm packages
+  ansible.builtin.apt:
+    name: "{{ kubeadm_packages }}"
+    state: present
+    update_cache: True
+    install_recommends: False
+    force_apt_get: True
+  become: True
+
+- name: configure kubeadm modules
+  ansible.builtin.template:
+    src: modules.conf.j2
+    dest: /etc/modules-load.d/kubeadm.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+  notify:
+    - kubeadm modprobe
+
+- name: configure kubeadm sysctl
+  ansible.builtin.template:
+    src: sysctl.conf.j2
+    dest: /etc/sysctl.d/90-kubeadm.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+  notify:
+    - kubeadm sysctl
+
+- meta: flush_handlers

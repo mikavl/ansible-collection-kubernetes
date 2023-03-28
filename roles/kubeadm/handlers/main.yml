@@ -1,0 +1,10 @@
+---
+
+- name: kubeadm modprobe
+  ansible.builtin.command: "modprobe {{ item | quote }}"
+  become: True
+  loop: "{{ kubeadm_modules }}"
+
+- name: kubeadm sysctl
+  ansible.builtin.command: "sysctl -p /etc/sysctl.d/90-kubeadm.conf"
+  become: True

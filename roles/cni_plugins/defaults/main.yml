@@ -2,5 +2,5 @@
 
 cni_plugins_version: "{{ (lookup(
   'ansible.builtin.url',
-  'https://api.github.com/repos/containernetworking/plugins/releases/latest'
+  'https://api.github.com/repos/' + cni_plugins_repo + '/releases/latest'
 ) | from_json).get('tag_name') | ansible.builtin.regex_replace('v', '') }}"

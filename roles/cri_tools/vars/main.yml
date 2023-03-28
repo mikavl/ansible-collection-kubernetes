@@ -13,6 +13,6 @@ cri_tools_archive_url: "https://github.com/{{ cri_tools_repo }}\
 cri_tools_archive_dest: "{{ archives_dir }}/{{ cri_tools_archive_url | basename }}"
 cri_tools_archive_checksum_type: sha256
 cri_tools_archive_checksum_url: "{{ cri_tools_url }}.{{ cri_tools_archive_checksum_type }}"
-cri_tools_archive_checksum: "{{ lookup('ansible.builtin.url', cri_tools_checksum_url).split() | first }}"
+cri_tools_archive_checksum: "{{ lookup('ansible.builtin.url', cri_tools_archive_checksum_url).split() | first }}"
 
 cri_tools_dir: /usr/local/bin

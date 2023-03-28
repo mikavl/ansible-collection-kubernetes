@@ -1,0 +1,9 @@
+---
+
+namespace: mikavl
+name: kubernetes
+version: 0.0.1
+readme: README.md
+authors:
+  - mikavl
+license_file: LICENSE

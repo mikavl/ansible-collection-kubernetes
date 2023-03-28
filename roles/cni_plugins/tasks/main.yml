@@ -1,0 +1,30 @@
+---
+
+- name: download cni-plugins archive
+  ansible.builtin.get_url:
+    url: "{{ cni_plugins_archive_url }}"
+    dest: "{{ cni_plugins_archive_dest }}"
+    checksum: "{{ cni_plugins_archive_checksum_type }}:{{ cni_plugins_archive_checksum }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+
+- name: create cni-plugins dir
+  ansible.builtin.file:
+    path: "{{ cni_plugins_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  become: True
+
+- name: unarchive cni-plugins
+  ansible.builtin.unarchive:
+    src: "{{ cni_plugins_archive_dest }}"
+    dest: "{{ cni_plugins_dir }}"
+    remote_src: True
+    owner: root
+    group: root
+    mode: 0755
+  become: True

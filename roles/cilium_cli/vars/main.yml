@@ -9,7 +9,7 @@ cilium_cli_repo: cilium/cilium-cli
 
 cilium_cli_archive_url: "https://github.com/{{ cilium_cli_repo }}\
   /releases/download/v{{ cilium_cli_version }}\
-  /cni-plugins-{{ cilium_cli_system }}-{{ cilium_cli_architecture }}-v{{ cilium_cli_version }}.tgz"
+  /cilium-{{ cilium_cli_system }}-{{ cilium_cli_architecture }}.tar.gz"
 cilium_cli_archive_dest: "{{ archives_dir }}/{{ cilium_cli_archive_url | basename }}"
 cilium_cli_archive_checksum_type: sha256
 cilium_cli_archive_checksum_url: "{{ cilium_cli_archive_url }}.{{ cilium_cli_archive_checksum_type }}sum"

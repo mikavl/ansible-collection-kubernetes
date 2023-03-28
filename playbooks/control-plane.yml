@@ -1,0 +1,14 @@
+---
+
+- name: setup kubernetes control plane node
+  hosts: "{{ targets }}"
+  roles:
+    - cni_plugins
+    - containerd
+    - cri_tools
+    - runc
+    - kubeadm
+    - kubectl
+    - kubelet
+    - release
+    - cilium_cli

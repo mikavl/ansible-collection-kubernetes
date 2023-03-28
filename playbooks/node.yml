@@ -1,0 +1,13 @@
+---
+
+- name: setup kubernetes nodes
+  hosts: "{{ targets }}"
+  roles:
+    - cni_plugins
+    - containerd
+    - cri_tools
+    - runc
+    - kubeadm
+    - kubectl
+    - kubelet
+    - release

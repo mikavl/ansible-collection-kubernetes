@@ -1,0 +1,20 @@
+---
+- name: download cilium-cli archive
+  ansible.builtin.get_url:
+    url: "{{ cilium_cli_archive_url }}"
+    dest: "{{ cilium_cli_archive_dest }}"
+    checksum: "{{ cilium_cli_archive_checksum_type }}:{{ cilium_cli_archive_checksum }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+
+- name: unarchive cilium-cli
+  ansible.builtin.unarchive:
+    src: "{{ cilium_cli_archive_dest }}"
+    dest: "{{ cilium_cli_dir }}"
+    remote_src: True
+    owner: root
+    group: root
+    mode: 0755
+  become: True

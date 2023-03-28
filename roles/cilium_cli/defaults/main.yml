@@ -1,0 +1,6 @@
+---
+
+cilium_cli_version: "{{ (lookup(
+  'ansible.builtin.url',
+  'https://api.github.com/repos/' + cilium_cli_repo + '/releases/latest'
+) | from_json).get('tag_name') | ansible.builtin.regex_replace('v', '') }}"

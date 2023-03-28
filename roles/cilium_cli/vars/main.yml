@@ -1,0 +1,18 @@
+---
+
+cilium_cli_architecture: "{{ {
+  'aarch64': 'arm64',
+  'x86_64': 'amd64',
+} [ansible_architecture] }}"
+cilium_cli_system: "{{ ansible_system | lower }}"
+cilium_cli_repo: cilium/cilium-cli
+
+cilium_cli_archive_url: "https://github.com/{{ cilium_cli_repo }}\
+  /releases/download/v{{ cilium_cli_version }}\
+  /cni-plugins-{{ cilium_cli_system }}-{{ cilium_cli_architecture }}-v{{ cilium_cli_version }}.tgz"
+cilium_cli_archive_dest: "{{ archives_dir }}/{{ cilium_cli_archive_url | basename }}"
+cilium_cli_archive_checksum_type: sha256
+cilium_cli_archive_checksum_url: "{{ cilium_cli_archive_url }}.{{ cilium_cli_archive_checksum_type }}sum"
+cilium_cli_archive_checksum: "{{ lookup('ansible.builtin.url', cilium_cli_archive_checksum_url).split() | first }}"
+
+cilium_cli_dir: /usr/local/bin

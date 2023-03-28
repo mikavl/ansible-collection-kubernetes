@@ -1,0 +1,12 @@
+---
+
+release_repo: "kubernetes/release"
+release_url_prefix: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ release_version }}/cmd/kubepkg/templates/latest/deb/"
+
+release_kubelet_service_url: "{{ release_url_prefix }}/kubelet/lib/systemd/system/kubelet.service"
+release_kubelet_service_dest: "/etc/systemd/system/{{ release_kubelet_service_url | basename }}"
+release_kubelet_service_name: "{{ release_kubelet_service_url | basename }}"
+
+release_kubelet_config_dir: "/etc/systemd/system/{{ release_kubelet_service_name }}.d"
+release_kubelet_config_url: "{{ release_url_prefix }}/kubeadm/10-kubeadm.conf"
+release_kubelet_config_dest: "{{ release_kubelet_config_dir }}/{{ release_kubelet_config_url | basename }}"

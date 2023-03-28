@@ -1,0 +1,6 @@
+---
+
+kubectl_version: "{{ lookup(
+  'ansible.builtin.url',
+  'https://dl.k8s.io/release/' + kubelet_label + '.txt'
+) | ansible.builtin.regex_replace('v', '') }}"

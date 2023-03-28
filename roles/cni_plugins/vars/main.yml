@@ -11,7 +11,7 @@ cni_plugins_archive_url: "https://github.com/containernetworking/plugins\
   /cni-plugins-{{ cni_plugins_system }}-{{ cni_plugins_architecture }}-v{{ cni_plugins_version }}.tgz"
 cni_plugins_archive_dest: "{{ archives_dir }}/{{ cni_plugins_archive_url | basename }}"
 cni_plugins_archive_checksum_type: sha256
-cni_plugins_archive_checksum_url: "{{ cni_plugins_archive_url }}.{{ cni_plugins_checksum_type }}"
-cni_plugins_archive_checksum: "{{ lookup('ansible.builtin.url', cni_plugins_checksum_url).split() | first }}"
+cni_plugins_archive_checksum_url: "{{ cni_plugins_archive_url }}.{{ cni_plugins_archive_checksum_type }}"
+cni_plugins_archive_checksum: "{{ lookup('ansible.builtin.url', cni_plugins_archive_checksum_url).split() | first }}"
 
 cni_plugins_dir: /opt/cni/bin

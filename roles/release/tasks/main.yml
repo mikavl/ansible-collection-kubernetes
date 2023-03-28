@@ -12,7 +12,7 @@
 - name: download release
   ansible.builtin.copy:
     dest: "{{ item.dest }}"
-    content: "{{ lookup('ansible.builtin.url', item.url) | regex_replace('/usr/bin/', '/usr/local/bin/') }}"
+    content: "{{ lookup('ansible.builtin.url', item.url, split_lines=False) | regex_replace('/usr/bin/', '/usr/local/bin/') }}"
     force: True
     owner: root
     group: root

@@ -40,3 +40,12 @@
     group: root
     mode: "0644"
   become: True
+
+- name: template cilium profile
+  ansible.builtin.template:
+    src: cilium.profile.j2
+    dest: /etc/profile.d/cilium.sh
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

@@ -63,3 +63,12 @@
     group: root
     mode: "0644"
   become: True
+
+- name: template kubeadm profile
+  ansible.builtin.template:
+    src: kubeadm.profile.j2
+    dest: /etc/profile.d/kubeadm.sh
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

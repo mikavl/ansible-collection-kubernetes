@@ -1,5 +1,17 @@
 ---
 
+- ansible.builtin.stat:
+    path: "{{ kubeadm_version_dest }}"
+  register: kubeadm_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ kubeadm_version_dest }}"
+  register: kubeadm_version_slurp
+  when: kubeadm_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "kubeadm: actual = {{ __kubeadm_version }}, desired = {{ kubeadm_version }}, upgrade = {{ kubeadm_upgrade }}"
+
 - name: download kubeadm binary
   ansible.builtin.get_url:
     url: "{{ kubeadm_binary_url }}"
@@ -42,3 +54,12 @@
     - kubeadm sysctl
 
 - meta: flush_handlers
+
+- name: record installed kubeadm version
+  ansible.builtin.copy:
+    content: "{{ __kubeadm_version }}"
+    dest: "{{ kubeadm_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

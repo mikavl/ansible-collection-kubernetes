@@ -1,5 +1,4 @@
 ---
----
 
 - ansible.builtin.stat:
     path: "{{ cri_tools_version_dest }}"
@@ -31,4 +30,13 @@
     owner: root
     group: root
     mode: 0755
+  become: True
+
+- name: record installed cri-tools version
+  ansible.builtin.copy:
+    content: "{{ __cri_tools_version }}"
+    dest: "{{ cri_tools_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
   become: True

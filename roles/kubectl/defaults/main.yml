@@ -1,6 +1,5 @@
 ---
 
-kubectl_version: "{{ lookup(
-  'ansible.builtin.url',
-  'https://dl.k8s.io/release/' + kubectl_label + '.txt'
-) | ansible.builtin.regex_replace('v', '') }}"
+kubectl_version: "{{ 'stable' | kubernetes_latest }}"
+
+kubectl_upgrade: False

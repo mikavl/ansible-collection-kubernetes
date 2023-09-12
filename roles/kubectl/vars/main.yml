@@ -13,3 +13,11 @@ kubectl_binary_dest: /usr/local/bin/kubectl
 kubectl_binary_checksum_type: sha256
 kubectl_binary_checksum_url: "{{ kubectl_binary_url }}.{{ kubectl_binary_checksum_type }}"
 kubectl_binary_checksum: "{{ lookup('ansible.builtin.url', kubectl_binary_checksum_url) }}"
+
+kubectl_version_dest: "{{ archives_dir }}/kubectl.version"
+
+__kubectl_version: "{{
+  kubectl_version_slurp.content | b64decode
+    if not kubectl_upgrade and kubectl_version_stat.stat.exists
+    else kubectl_version
+  }}"

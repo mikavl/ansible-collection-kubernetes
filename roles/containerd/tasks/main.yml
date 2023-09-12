@@ -78,3 +78,12 @@
     state: started
     enabled: True
   become: True
+
+- name: record installed containerd version
+  ansible.builtin.copy:
+    content: "{{ __containerd_version }}"
+    dest: "{{ containerd_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

@@ -13,3 +13,11 @@ kubelet_binary_dest: /usr/local/bin/kubelet
 kubelet_binary_checksum_type: sha256
 kubelet_binary_checksum_url: "{{ kubelet_binary_url }}.{{ kubelet_binary_checksum_type }}"
 kubelet_binary_checksum: "{{ lookup('ansible.builtin.url', kubelet_binary_checksum_url) }}"
+
+kubelet_version_dest: "{{ archives_dir }}/kubelet.version"
+
+__kubelet_version: "{{
+  kubelet_version_slurp.content | b64decode
+    if not kubelet_upgrade and kubelet_version_stat.stat.exists
+    else kubelet_version
+  }}"

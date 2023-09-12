@@ -21,3 +21,12 @@
     group: root
     mode: 0755
   become: True
+
+- name: record installed runc version
+  ansible.builtin.copy:
+    content: "{{ __runc_version }}"
+    dest: "{{ runc_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

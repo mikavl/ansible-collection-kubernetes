@@ -8,6 +8,7 @@ class FilterModule(object):
     def filters(self):
         return {
             "github_latest": self.github_latest,
+            "kubernetes_latest": self.kubernetes_latest,
         }
 
     def github_latest(self, repository):
@@ -18,3 +19,10 @@ class FilterModule(object):
             content = response.read().decode(response.headers.get_content_charset())
             result = re.search(regex, content)
             return result.group(1)
+
+    def kubernetes_latest(self, label):
+        url = "https://dl.k8s.io/release/{0}.txt".format(label)
+
+        with urllib.request.urlopen(url) as response:
+            content = response.read().decode(response.headers.get_content_charset())
+            return content.replace("v", "")

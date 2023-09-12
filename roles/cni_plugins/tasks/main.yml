@@ -40,3 +40,12 @@
     group: root
     mode: 0755
   become: True
+
+- name: record installed cni-plugins version
+  ansible.builtin.copy:
+    content: "{{ __cni_plugins_version }}"
+    dest: "{{ cni_plugins_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

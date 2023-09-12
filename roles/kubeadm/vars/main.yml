@@ -18,6 +18,7 @@ kubeadm_packages:
   - apparmor
   - conntrack
   - ethtool
+  - iptables
   - socat
 
 kubeadm_modules:
@@ -25,3 +26,11 @@ kubeadm_modules:
 
 kubeadm_sysctl_variables:
   net.ipv4.ip_forward: "1"
+
+kubeadm_version_dest: "{{ archives_dir }}/kubeadm.version"
+
+__kubeadm_version: "{{
+  kubeadm_version_slurp.content | b64decode
+    if not kubeadm_upgrade and kubeadm_version_stat.stat.exists
+    else kubeadm_version
+  }}"

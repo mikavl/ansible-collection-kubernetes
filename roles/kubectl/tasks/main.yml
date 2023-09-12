@@ -1,5 +1,17 @@
 ---
 
+- ansible.builtin.stat:
+    path: "{{ kubectl_version_dest }}"
+  register: kubectl_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ kubectl_version_dest }}"
+  register: kubectl_version_slurp
+  when: kubectl_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "kubectl: actual = {{ __kubectl_version }}, desired = {{ kubectl_version }}, upgrade = {{ kubectl_upgrade }}"
+
 - name: download kubectl binary
   ansible.builtin.get_url:
     url: "{{ kubectl_binary_url }}"
@@ -8,4 +20,13 @@
     owner: root
     group: root
     mode: 0755
+  become: True
+
+- name: record installed kubectl version
+  ansible.builtin.copy:
+    content: "{{ __kubectl_version }}"
+    dest: "{{ kubectl_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
   become: True

@@ -1,6 +1,5 @@
 ---
 
-kubeadm_version: "{{ lookup(
-  'ansible.builtin.url',
-  'https://dl.k8s.io/release/' + kubeadm_label + '.txt'
-) | ansible.builtin.regex_replace('v', '') }}"
+kubeadm_version: "{{ 'stable' | kubernetes_latest }}"
+
+kubeadm_upgrade: False

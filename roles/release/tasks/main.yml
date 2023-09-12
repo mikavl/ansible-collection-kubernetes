@@ -60,3 +60,12 @@
     group: root
     mode: 0700
   become: True
+
+- name: record installed release version
+  ansible.builtin.copy:
+    content: "{{ __release_version }}"
+    dest: "{{ release_version_dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: True

@@ -16,7 +16,7 @@ cilium_cli_archive_url: "https://github.com/{{ cilium_cli_repo }}\
   /releases/download/v{{ __cilium_cli_version }}\
   /cilium-{{ cilium_cli_system }}-{{ cilium_cli_architecture }}.tar.gz"
 
-cilium_cli_version_dest: "{{ cilium_cli_archive_dest }}.version"
+cilium_cli_version_dest: "{{ archives_dir }}/{{ cilium_cli_repo | basename }}.version"
 
 __cilium_cli_version: "{{
   cilium_cli_version_slurp.content | b64decode

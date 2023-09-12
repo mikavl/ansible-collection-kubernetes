@@ -8,8 +8,8 @@ containerd_system: "{{ ansible_system | lower }}"
 containerd_repo: containerd/containerd
 
 containerd_archive_url: "https://github.com/{{ containerd_repo }}\
-  /releases/download/v{{ containerd_version }}\
-  /containerd-{{ containerd_version }}-{{ containerd_system }}-{{ containerd_architecture }}.tar.gz"
+  /releases/download/v{{ __containerd_version }}\
+  /containerd-{{ __containerd_version }}-{{ containerd_system }}-{{ containerd_architecture }}.tar.gz"
 containerd_archive_dest: "{{ archives_dir }}/{{ containerd_archive_url | basename }}"
 containerd_archive_checksum_type: sha256
 containerd_archive_checksum_url: "{{ containerd_archive_url }}.{{ containerd_archive_checksum_type }}sum"
@@ -17,9 +17,17 @@ containerd_archive_checksum: "{{ lookup('ansible.builtin.url', containerd_archiv
 
 containerd_dir: /usr/local/bin
 
-containerd_service_url: "https://raw.githubusercontent.com/containerd/containerd/main/containerd.service"
+containerd_service_url: "https://raw.githubusercontent.com/containerd/containerd/v{{ __containerd_version }}/containerd.service"
 containerd_service_name: "{{ containerd_service_url | basename }}"
 containerd_service_dest: "/etc/systemd/system/{{ containerd_service_name }}"
 
 containerd_config_dir: /etc/containerd
 containerd_config_dest: "{{ containerd_config_dir }}/config.toml"
+
+containerd_version_dest: "{{ archives_dir }}/{{ containerd_repo | basename }}.version"
+
+__containerd_version: "{{
+  containerd_version_slurp.content | b64decode
+    if not containerd_upgrade and containerd_version_stat.stat.exists
+    else containerd_version
+  }}"

@@ -6,7 +6,7 @@ runc_architecture: "{{ {
 } [ansible_architecture] }}"
 runc_repo: opencontainers/runc
 
-runc_binary_url: "https://github.com/{{ runc_repo }}/releases/download/v{{ runc_version }}/runc.{{ runc_architecture }}"
+runc_binary_url: "https://github.com/{{ runc_repo }}/releases/download/v{{ __runc_version }}/runc.{{ runc_architecture }}"
 runc_binary_dest: /usr/local/bin/runc
 
 runc_binary_checksum_type: sha256
@@ -15,3 +15,11 @@ runc_binary_checksum_regex: '^([a-z0-9]+)\s+runc\.{{ runc_architecture }}$'
 runc_binary_checksum: "{{ lookup(
   'ansible.builtin.url', runc_binary_checksum_url, split_lines=False
 ) | regex_search(runc_binary_checksum_regex, '\\1', multiline=True) }}"
+
+runc_version_dest: "{{ archives_dir }}/{{ runc_repo | basename }}.version"
+
+__runc_version: "{{
+  runc_version_slurp.content | b64decode
+    if not runc_upgrade and runc_version_stat.stat.exists
+    else runc_version
+  }}"

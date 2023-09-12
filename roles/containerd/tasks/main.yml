@@ -1,5 +1,17 @@
 ---
 
+- ansible.builtin.stat:
+    path: "{{ containerd_version_dest }}"
+  register: containerd_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ containerd_version_dest }}"
+  register: containerd_version_slurp
+  when: containerd_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "containerd: actual = {{ __containerd_version }}, desired = {{ containerd_version }}, upgrade = {{ containerd_upgrade }}"
+
 - name: download containerd
   ansible.builtin.get_url:
     url: "{{ containerd_archive_url }}"

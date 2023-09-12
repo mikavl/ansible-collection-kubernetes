@@ -8,11 +8,19 @@ cni_plugins_system: "{{ ansible_system | lower }}"
 cni_plugins_repo: containernetworking/plugins
 
 cni_plugins_archive_url: "https://github.com/{{ cni_plugins_repo }}\
-  /releases/download/v{{ cni_plugins_version }}\
-  /cni-plugins-{{ cni_plugins_system }}-{{ cni_plugins_architecture }}-v{{ cni_plugins_version }}.tgz"
+  /releases/download/v{{ __cni_plugins_version }}\
+  /cni-plugins-{{ cni_plugins_system }}-{{ cni_plugins_architecture }}-v{{ __cni_plugins_version }}.tgz"
 cni_plugins_archive_dest: "{{ archives_dir }}/{{ cni_plugins_archive_url | basename }}"
 cni_plugins_archive_checksum_type: sha256
 cni_plugins_archive_checksum_url: "{{ cni_plugins_archive_url }}.{{ cni_plugins_archive_checksum_type }}"
 cni_plugins_archive_checksum: "{{ lookup('ansible.builtin.url', cni_plugins_archive_checksum_url).split() | first }}"
 
 cni_plugins_dir: /opt/cni/bin
+
+cni_plugins_version_dest: "{{ archives_dir }}/{{ cni_plugins_repo | basename }}.version"
+
+__cni_plugins_version: "{{
+  cni_plugins_version_slurp.content | b64decode
+    if not cni_plugins_upgrade and cni_plugins_version_stat.stat.exists
+    else cni_plugins_version
+  }}"

@@ -1,5 +1,17 @@
 ---
 
+- ansible.builtin.stat:
+    path: "{{ cni_plugins_version_dest }}"
+  register: cni_plugins_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ cni_plugins_version_dest }}"
+  register: cni_plugins_version_slurp
+  when: cni_plugins_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "cni-plugins: actual = {{ __cni_plugins_version }}, desired = {{ cni_plugins_version }}, upgrade = {{ cni_plugins_upgrade }}"
+
 - name: download cni-plugins archive
   ansible.builtin.get_url:
     url: "{{ cni_plugins_archive_url }}"

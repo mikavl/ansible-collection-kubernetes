@@ -1,5 +1,17 @@
 ---
 
+- ansible.builtin.stat:
+    path: "{{ runc_version_dest }}"
+  register: runc_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ runc_version_dest }}"
+  register: runc_version_slurp
+  when: runc_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "runc: actual = {{ __runc_version }}, desired = {{ runc_version }}, upgrade = {{ runc_upgrade }}"
+
 - name: download runc
   ansible.builtin.get_url:
     url: "{{ runc_binary_url }}"

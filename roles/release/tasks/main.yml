@@ -1,5 +1,17 @@
 ---
 
+- ansible.builtin.stat:
+    path: "{{ release_version_dest }}"
+  register: release_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ release_version_dest }}"
+  register: release_version_slurp
+  when: release_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "release: actual = {{ __release_version }}, desired = {{ release_version }}, upgrade = {{ release_upgrade }}"
+
 - name: create release config dir
   ansible.builtin.file:
     path: "{{ release_kubelet_config_dir }}"

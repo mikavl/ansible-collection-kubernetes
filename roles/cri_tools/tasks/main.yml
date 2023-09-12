@@ -1,4 +1,17 @@
 ---
+---
+
+- ansible.builtin.stat:
+    path: "{{ cri_tools_version_dest }}"
+  register: cri_tools_version_stat
+
+- ansible.builtin.slurp:
+    path: "{{ cri_tools_version_dest }}"
+  register: cri_tools_version_slurp
+  when: cri_tools_version_stat.stat.exists
+
+- ansible.builtin.debug:
+    msg: "cri-tools: actual = {{ __cri_tools_version }}, desired = {{ cri_tools_version }}, upgrade = {{ cri_tools_upgrade }}"
 
 - name: download cri-tools
   ansible.builtin.get_url:

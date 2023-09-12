@@ -1,6 +1,5 @@
 ---
 
-cri_tools_version: "{{ (lookup(
-  'ansible.builtin.url',
-  'https://api.github.com/repos/' + cri_tools_repo + '/releases/latest'
-) | from_json).get('tag_name') | ansible.builtin.regex_replace('v', '') }}"
+cri_tools_version: "{{ cri_tools_repo | github_latest }}"
+
+cri_tools_upgrade: False

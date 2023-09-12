@@ -24,5 +24,5 @@ class FilterModule(object):
         url = "https://dl.k8s.io/release/{0}.txt".format(label)
 
         with urllib.request.urlopen(url) as response:
-            content = response.read().decode(response.headers.get_content_charset())
+            content = response.read().decode("utf-8")
             return content.replace("v", "")

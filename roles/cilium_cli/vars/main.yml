@@ -20,6 +20,6 @@ cilium_cli_version_dest: "{{ archives_dir }}/{{ cilium_cli_repo | basename }}.ve
 
 __cilium_cli_version: "{{
   cilium_cli_version_slurp.content | b64decode
-    if not cilium_upgrade and cilium_cli_version_stat.stat.exists
+    if not cilium_cli_upgrade and cilium_cli_version_stat.stat.exists
     else cilium_cli_version
   }}"

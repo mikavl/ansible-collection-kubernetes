@@ -11,7 +11,6 @@
 
 - ansible.builtin.debug:
     msg: "{{ __cilium_cli_version }} -> {{ cilium_cli_version }}, cilium_cli_upgrade = {{ cilium_cli_upgrade }}"
-  when: cilium_cli_version != __cilium_cli_version
 
 - name: download cilium-cli archive
   ansible.builtin.get_url:

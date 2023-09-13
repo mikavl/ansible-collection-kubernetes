@@ -1,5 +1,5 @@
 ---
 
-kubelet_version: "{{ 'stable' | kubernetes_latest }}"
+kubelet_version: "{{ 'stable' | mikavl.kubernetes.kubernetes_latest }}"
 
 kubelet_upgrade: False

@@ -1,5 +1,5 @@
 ---
 
-kubectl_version: "{{ 'stable' | kubernetes_latest }}"
+kubectl_version: "{{ 'stable' | mikavl.kubernetes.kubernetes_latest }}"
 
 kubectl_upgrade: False

@@ -1,5 +1,5 @@
 ---
 
-cni_plugins_version: "{{ cni_plugins_repo | github_latest }}"
+cni_plugins_version: "{{ cni_plugins_repo | mikavl.kubernetes.github_latest }}"
 
 cni_plugins_upgrade: False

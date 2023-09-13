@@ -1,5 +1,5 @@
 ---
 
-containerd_version: "{{ containerd_repo | github_latest }}"
+containerd_version: "{{ containerd_repo | mikavl.kubernetes.github_latest }}"
 
 containerd_upgrade: False

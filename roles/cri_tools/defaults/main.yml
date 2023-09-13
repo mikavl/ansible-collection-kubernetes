@@ -1,5 +1,5 @@
 ---
 
-cri_tools_version: "{{ cri_tools_repo | github_latest }}"
+cri_tools_version: "{{ cri_tools_repo | mikavl.kubernetes.github_latest }}"
 
 cri_tools_upgrade: False

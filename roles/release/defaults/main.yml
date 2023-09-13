@@ -1,5 +1,5 @@
 ---
 
-release_version: "{{ release_repo | github_latest }}"
+release_version: "{{ release_repo | mikavl.kubernetes.github_latest }}"
 
 release_upgrade: False

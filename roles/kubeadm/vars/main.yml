@@ -7,7 +7,7 @@ kubeadm_architecture: "{{ {
 kubeadm_system: "{{ ansible_system | lower }}"
 kubeadm_label: stable
 
-kubeadm_binary_url: "https://dl.k8s.io/release/v{{ kubeadm_version }}\
+kubeadm_binary_url: "https://dl.k8s.io/release/v{{ __kubeadm_version }}\
   /bin/{{ kubeadm_system }}/{{ kubeadm_architecture }}/kubeadm"
 kubeadm_binary_dest: /usr/local/bin/kubeadm
 kubeadm_binary_checksum_type: sha256

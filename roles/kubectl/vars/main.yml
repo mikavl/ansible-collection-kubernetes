@@ -7,7 +7,7 @@ kubectl_architecture: "{{ {
 kubectl_system: "{{ ansible_system | lower }}"
 kubectl_label: stable
 
-kubectl_binary_url: "https://dl.k8s.io/release/v{{ kubectl_version }}\
+kubectl_binary_url: "https://dl.k8s.io/release/v{{ __kubectl_version }}\
   /bin/{{ kubectl_system }}/{{ kubectl_architecture }}/kubectl"
 kubectl_binary_dest: /usr/local/bin/kubectl
 kubectl_binary_checksum_type: sha256

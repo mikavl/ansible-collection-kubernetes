@@ -7,7 +7,7 @@ kubelet_architecture: "{{ {
 kubelet_system: "{{ ansible_system | lower }}"
 kubelet_label: stable
 
-kubelet_binary_url: "https://dl.k8s.io/release/v{{ kubelet_version }}\
+kubelet_binary_url: "https://dl.k8s.io/release/v{{ __kubelet_version }}\
   /bin/{{ kubelet_system }}/{{ kubelet_architecture }}/kubelet"
 kubelet_binary_dest: /usr/local/bin/kubelet
 kubelet_binary_checksum_type: sha256

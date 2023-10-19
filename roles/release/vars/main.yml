@@ -1,9 +1,9 @@
 ---
 
 release_repo: "kubernetes/release"
-release_url_prefix: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ __release_version }}/cmd/kubepkg/templates/latest/deb/"
+release_url_prefix: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ __release_version }}/cmd/krel/templates/latest"
 
-release_kubelet_service_url: "{{ release_url_prefix }}/kubelet/lib/systemd/system/kubelet.service"
+release_kubelet_service_url: "{{ release_url_prefix }}/kubelet/kubelet.service"
 release_kubelet_service_dest: "/etc/systemd/system/{{ release_kubelet_service_url | basename }}"
 release_kubelet_service_name: "{{ release_kubelet_service_url | basename }}"
 

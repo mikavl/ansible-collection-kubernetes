@@ -1,26 +1,13 @@
 ---
 
-cri_tools_architecture: "{{ {
-  'aarch64': 'arm64',
-  'x86_64': 'amd64',
-} [ansible_architecture] }}"
-cri_tools_system: "{{ ansible_system | lower }}"
 cri_tools_repo: kubernetes-sigs/cri-tools
 
 cri_tools_archive_url: "https://github.com/{{ cri_tools_repo }}\
-  /releases/download/v{{ __cri_tools_version }}\
-  /crictl-v{{ __cri_tools_version }}-{{ cri_tools_system }}-{{ cri_tools_architecture }}.tar.gz"
-cri_tools_archive_dest: "{{ archives_dir }}/{{ cri_tools_archive_url | basename }}"
-cri_tools_archive_checksum_type: sha256
-cri_tools_archive_checksum_url: "{{ cri_tools_archive_url }}.{{ cri_tools_archive_checksum_type }}"
+  /releases/download/v{{ cri_tools_version }}\
+  /crictl-v{{ cri_tools_version }}-{{ common_system }}-{{ common_architecture }}.tar.gz"
+
+cri_tools_archive_dest: "{{ cache_dir }}/{{ cri_tools_archive_url | basename }}"
+
+cri_tools_archive_checksum_url: "{{ cri_tools_archive_url }}.{{ common_checksum_type }}"
+
 cri_tools_archive_checksum: "{{ lookup('ansible.builtin.url', cri_tools_archive_checksum_url).split() | first }}"
-
-cri_tools_dir: /usr/local/bin
-
-cri_tools_version_dest: "{{ archives_dir }}/{{ cri_tools_repo | basename }}.version"
-
-__cri_tools_version: "{{
-  cri_tools_version_slurp.content | b64decode
-    if not cri_tools_upgrade and cri_tools_version_stat.stat.exists
-    else cri_tools_version
-  }}"

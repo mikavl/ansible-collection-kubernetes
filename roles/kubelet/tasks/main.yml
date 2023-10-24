@@ -1,32 +1,11 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ kubelet_version_dest }}"
-  register: kubelet_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ kubelet_version_dest }}"
-  register: kubelet_version_slurp
-  when: kubelet_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "kubelet: actual = {{ __kubelet_version }}, desired = {{ kubelet_version }}, upgrade = {{ kubelet_upgrade }}"
-
 - name: download kubelet
   ansible.builtin.get_url:
-    url: "{{ kubelet_binary_url }}"
-    dest: "{{ kubelet_binary_dest }}"
-    checksum: "{{ kubelet_binary_checksum_type }}:{{ kubelet_binary_checksum }}"
+    url: "{{ kubelet_url }}"
+    dest: "{{ common_dir }}/kubelet"
+    checksum: "{{ common_checksum_type }}:{{ kubelet_checksum }}"
     owner: root
     group: root
     mode: 0755
-  become: True
-
-- name: record installed kubelet version
-  ansible.builtin.copy:
-    content: "{{ __kubelet_version }}"
-    dest: "{{ kubelet_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
   become: True

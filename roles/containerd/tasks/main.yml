@@ -1,22 +1,10 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ containerd_version_dest }}"
-  register: containerd_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ containerd_version_dest }}"
-  register: containerd_version_slurp
-  when: containerd_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "containerd: actual = {{ __containerd_version }}, desired = {{ containerd_version }}, upgrade = {{ containerd_upgrade }}"
-
 - name: download containerd
   ansible.builtin.get_url:
     url: "{{ containerd_archive_url }}"
     dest: "{{ containerd_archive_dest }}"
-    checksum: "{{ containerd_archive_checksum_type }}:{{ containerd_archive_checksum }}"
+    checksum: "{{ common_checksum_type }}:{{ containerd_archive_checksum }}"
     owner: root
     group: root
     mode: 0644
@@ -25,7 +13,7 @@
 - name: unarchive containerd
   ansible.builtin.unarchive:
     src: "{{ containerd_archive_dest }}"
-    dest: "{{ containerd_dir }}"
+    dest: "{{ common_dir }}"
     remote_src: True
     extra_opts:
       - --strip-components=1
@@ -35,8 +23,7 @@
     group: root
     mode: 0755
   become: True
-  notify:
-    - restart containerd service
+  notify: restart containerd service
 
 - name: download containerd service
   ansible.builtin.get_url:
@@ -47,8 +34,7 @@
     group: root
     mode: 0644
   become: True
-  notify:
-    - restart containerd service
+  notify: restart containerd service
 
 - name: create containerd config dir
   ansible.builtin.file:
@@ -67,8 +53,7 @@
     group: root
     mode: 0644
   become: True
-  notify:
-    - restart containerd service
+  notify: restart containerd service
 
 - meta: flush_handlers
 
@@ -77,13 +62,4 @@
     name: "{{ containerd_service_name }}"
     state: started
     enabled: True
-  become: True
-
-- name: record installed containerd version
-  ansible.builtin.copy:
-    content: "{{ __containerd_version }}"
-    dest: "{{ containerd_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
   become: True

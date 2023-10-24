@@ -1,0 +1,16 @@
+---
+
+# Translate Ansible's architecture to what is used in the packages
+common_architecture: "{{ {
+  'aarch64': 'arm64',
+  'x86_64': 'amd64',
+} [ansible_architecture] }}"
+
+# Do a similar thing with Ansible's system var
+common_system: "{{ ansible_system | lower }}"
+
+# Checksums seem to be mostly sha256
+common_checksum_type: sha256
+
+# Place binaries here unless otherwise required
+common_dir: /usr/local/bin

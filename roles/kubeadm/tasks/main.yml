@@ -1,22 +1,10 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ kubeadm_version_dest }}"
-  register: kubeadm_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ kubeadm_version_dest }}"
-  register: kubeadm_version_slurp
-  when: kubeadm_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "kubeadm: actual = {{ __kubeadm_version }}, desired = {{ kubeadm_version }}, upgrade = {{ kubeadm_upgrade }}"
-
 - name: download kubeadm binary
   ansible.builtin.get_url:
-    url: "{{ kubeadm_binary_url }}"
-    dest: "{{ kubeadm_binary_dest }}"
-    checksum: "{{ kubeadm_binary_checksum_type }}:{{ kubeadm_binary_checksum }}"
+    url: "{{ kubeadm_url }}"
+    dest: "{{ common_dir }}/kubeadm"
+    checksum: "{{ common_checksum_type }}:{{ kubeadm_checksum }}"
     owner: root
     group: root
     mode: 0755
@@ -39,8 +27,7 @@
     group: root
     mode: 0644
   become: True
-  notify:
-    - kubeadm modprobe
+  notify: kubeadm modprobe
 
 - name: configure kubeadm sysctl
   ansible.builtin.template:
@@ -50,19 +37,9 @@
     group: root
     mode: 0644
   become: True
-  notify:
-    - kubeadm sysctl
+  notify: kubeadm sysctl reload
 
 - meta: flush_handlers
-
-- name: record installed kubeadm version
-  ansible.builtin.copy:
-    content: "{{ __kubeadm_version }}"
-    dest: "{{ kubeadm_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
-  become: True
 
 - name: template kubeadm profile
   ansible.builtin.template:
@@ -70,5 +47,5 @@
     dest: /etc/profile.d/kubeadm.sh
     owner: root
     group: root
-    mode: "0644"
+    mode:"0644
   become: True

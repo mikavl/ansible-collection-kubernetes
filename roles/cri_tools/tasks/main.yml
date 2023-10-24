@@ -1,22 +1,10 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ cri_tools_version_dest }}"
-  register: cri_tools_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ cri_tools_version_dest }}"
-  register: cri_tools_version_slurp
-  when: cri_tools_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "cri-tools: actual = {{ __cri_tools_version }}, desired = {{ cri_tools_version }}, upgrade = {{ cri_tools_upgrade }}"
-
 - name: download cri-tools
   ansible.builtin.get_url:
     url: "{{ cri_tools_archive_url }}"
     dest: "{{ cri_tools_archive_dest }}"
-    checksum: "{{ cri_tools_archive_checksum_type }}:{{ cri_tools_archive_checksum }}"
+    checksum: "{{ common_checksum_type }}:{{ cri_tools_archive_checksum }}"
     owner: root
     group: root
     mode: 0644
@@ -30,13 +18,4 @@
     owner: root
     group: root
     mode: 0755
-  become: True
-
-- name: record installed cri-tools version
-  ansible.builtin.copy:
-    content: "{{ __cri_tools_version }}"
-    dest: "{{ cri_tools_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
   become: True

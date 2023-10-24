@@ -1,5 +1,0 @@
----
-
-runc_version: "{{ runc_repo | mikavl.kubernetes.github_latest }}"
-
-runc_upgrade: False

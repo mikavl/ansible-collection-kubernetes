@@ -1,0 +1,4 @@
+---
+
+# Where to save downloaded archives to before extraction
+cache_dir: /var/cache/kubernetes/archives

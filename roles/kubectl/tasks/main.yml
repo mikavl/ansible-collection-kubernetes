@@ -1,34 +1,13 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ kubectl_version_dest }}"
-  register: kubectl_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ kubectl_version_dest }}"
-  register: kubectl_version_slurp
-  when: kubectl_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "kubectl: actual = {{ __kubectl_version }}, desired = {{ kubectl_version }}, upgrade = {{ kubectl_upgrade }}"
-
 - name: download kubectl binary
   ansible.builtin.get_url:
-    url: "{{ kubectl_binary_url }}"
-    dest: "{{ kubectl_binary_dest }}"
-    checksum: "{{ kubectl_binary_checksum_type }}:{{ kubectl_binary_checksum }}"
+    url: "{{ kubectl_url }}"
+    dest: "{{ common_dir }}/kubectl"
+    checksum: "{{ common_checksum_type }}:{{ kubectl_checksum }}"
     owner: root
     group: root
     mode: 0755
-  become: True
-
-- name: record installed kubectl version
-  ansible.builtin.copy:
-    content: "{{ __kubectl_version }}"
-    dest: "{{ kubectl_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
   become: True
 
 - name: template kubectl profile
@@ -37,5 +16,5 @@
     dest: /etc/profile.d/kubectl.sh
     owner: root
     group: root
-    mode: "0644"
+    mode: 0644
   become: True

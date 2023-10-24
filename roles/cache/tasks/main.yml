@@ -1,10 +1,11 @@
 ---
 
-- name: create archives dir
+- name: create cache dir
   ansible.builtin.file:
-    path: "{{ archives_dir }}"
+    path: "{{ cache_dir }}"
     state: directory
     owner: root
     group: root
-    mode: "0755"
+    mode: 0755
   become: True
+  tags: [ cache ]

@@ -1,32 +1,12 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ runc_version_dest }}"
-  register: runc_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ runc_version_dest }}"
-  register: runc_version_slurp
-  when: runc_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "runc: actual = {{ __runc_version }}, desired = {{ runc_version }}, upgrade = {{ runc_upgrade }}"
-
 - name: download runc
   ansible.builtin.get_url:
-    url: "{{ runc_binary_url }}"
-    dest: "{{ runc_binary_dest }}"
-    checksum: "{{ runc_binary_checksum_type }}:{{ runc_binary_checksum }}"
+    url: "{{ runc_url }}"
+    dest: "{{ common_dir }}/runc"
+    checksum: "{{ common_checksum_type }}:{{ runc_checksum }}"
     owner: root
     group: root
     mode: 0755
   become: True
-
-- name: record installed runc version
-  ansible.builtin.copy:
-    content: "{{ __runc_version }}"
-    dest: "{{ runc_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
-  become: True
+  tags: [ runc ]

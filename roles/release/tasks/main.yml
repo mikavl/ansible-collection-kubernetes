@@ -1,20 +1,8 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ release_version_dest }}"
-  register: release_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ release_version_dest }}"
-  register: release_version_slurp
-  when: release_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "release: actual = {{ __release_version }}, desired = {{ release_version }}, upgrade = {{ release_upgrade }}"
-
 - name: create release config dir
   ansible.builtin.file:
-    path: "{{ release_kubelet_config_dir }}"
+    path: "{{ release_config_dir }}"
     state: directory
     owner: root
     group: root
@@ -31,41 +19,31 @@
     mode: 0644
   become: True
   loop:
-    - url: "{{ release_kubelet_service_url }}"
-      dest: "{{ release_kubelet_service_dest }}"
-    - url: "{{ release_kubelet_config_url }}"
-      dest: "{{ release_kubelet_config_dest }}"
+    - { url: "{{ release_service_url }}", dest: "{{ release_service_dest }}" }
+    - { url: "{{ release_config_url }}", dest: "{{ release_config_dest }}" }
 
 - name: enable kubelet service
   ansible.builtin.systemd:
-    name: "{{ release_kubelet_service_name }}"
+    name: "{{ release_service_name }}"
     daemon_reload: True
     enabled: True
   become: True
 
-- name: create kubernetes config dir
+- name: create release config dir
   ansible.builtin.file:
-    path: /etc/kubernetes
+    path: "{{ release_kubernetes_dir }}"
     state: directory
     owner: root
     group: root
     mode: 0755
   become: True
 
-- name: create kubernetes manifests dir
+# Explicitly create this, otherwise non-control plane nodes might spam log
+- name: create release manifests dir
   ansible.builtin.file:
-    path: /etc/kubernetes/manifests
+    path: "{{ release_kubernetes_dir }}/manifests"
     state: directory
     owner: root
     group: root
     mode: 0700
-  become: True
-
-- name: record installed release version
-  ansible.builtin.copy:
-    content: "{{ __release_version }}"
-    dest: "{{ release_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
   become: True

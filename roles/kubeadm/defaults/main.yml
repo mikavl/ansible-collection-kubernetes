@@ -1,5 +1,0 @@
----
-
-kubeadm_version: "{{ 'stable' | mikavl.kubernetes.kubernetes_latest }}"
-
-kubeadm_upgrade: False

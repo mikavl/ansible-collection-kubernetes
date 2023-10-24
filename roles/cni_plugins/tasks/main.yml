@@ -1,26 +1,15 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ cni_plugins_version_dest }}"
-  register: cni_plugins_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ cni_plugins_version_dest }}"
-  register: cni_plugins_version_slurp
-  when: cni_plugins_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "cni-plugins: actual = {{ __cni_plugins_version }}, desired = {{ cni_plugins_version }}, upgrade = {{ cni_plugins_upgrade }}"
-
 - name: download cni-plugins archive
   ansible.builtin.get_url:
     url: "{{ cni_plugins_archive_url }}"
     dest: "{{ cni_plugins_archive_dest }}"
-    checksum: "{{ cni_plugins_archive_checksum_type }}:{{ cni_plugins_archive_checksum }}"
+    checksum: "{{ common_checksum_type }}:{{ cni_plugins_archive_checksum }}"
     owner: root
     group: root
     mode: 0644
   become: True
+  tags: [ cni-plugins ]
 
 - name: create cni-plugins dir
   ansible.builtin.file:
@@ -30,6 +19,7 @@
     group: root
     mode: 0755
   become: True
+  tags: [ cni-plugins ]
 
 - name: unarchive cni-plugins
   ansible.builtin.unarchive:
@@ -40,12 +30,4 @@
     group: root
     mode: 0755
   become: True
-
-- name: record installed cni-plugins version
-  ansible.builtin.copy:
-    content: "{{ __cni_plugins_version }}"
-    dest: "{{ cni_plugins_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
-  become: True
+  tags: [ cni-plugins ]

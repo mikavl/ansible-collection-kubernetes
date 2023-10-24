@@ -1,5 +1,0 @@
----
-
-cilium_cli_version: "{{ cilium_cli_repo | mikavl.kubernetes.github_latest }}"
-
-cilium_cli_upgrade: False

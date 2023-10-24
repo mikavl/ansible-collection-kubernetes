@@ -1,20 +1,19 @@
 ---
 
-release_repo: "kubernetes/release"
-release_url_prefix: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ __release_version }}/cmd/krel/templates/latest"
+release_repo: kubernetes/release
 
-release_kubelet_service_url: "{{ release_url_prefix }}/kubelet/kubelet.service"
-release_kubelet_service_dest: "/etc/systemd/system/{{ release_kubelet_service_url | basename }}"
-release_kubelet_service_name: "{{ release_kubelet_service_url | basename }}"
+# Base URL for the config and service files
+release_url: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ release_version }}/cmd/kubepkg/templates/latest/deb/"
 
-release_kubelet_config_dir: "/etc/systemd/system/{{ release_kubelet_service_name }}.d"
-release_kubelet_config_url: "{{ release_url_prefix }}/kubeadm/10-kubeadm.conf"
-release_kubelet_config_dest: "{{ release_kubelet_config_dir }}/{{ release_kubelet_config_url | basename }}"
+# This is actually the kubelet service file, but use a separate role for release as it has its own cycle
+release_service_url: "{{ release_url }}/kubelet/lib/systemd/system/kubelet.service"
+release_service_name: "{{ release_service_url | basename }}"
+release_service_dest: /etc/systemd/system/{{ release_service_name }}
 
-release_version_dest: "{{ archives_dir }}/{{ release_repo | basename }}.version"
+# And this is the kubelet service config file
+release_config_url: "{{ release_url }}/kubeadm/10-kubeadm.conf"
+release_config_dir: /etc/systemd/system/{{ release_service_name }}.d
+release_config_dest: "{{ release_config_dir }}/{{ release_config_url | basename }}"
 
-__release_version: "{{
-  release_version_slurp.content | b64decode
-    if not release_upgrade and release_version_stat.stat.exists
-    else release_version
-  }}"
+# Just wrap /etc/kubernetes here
+release_kubernetes_dir: /etc/kubernetes

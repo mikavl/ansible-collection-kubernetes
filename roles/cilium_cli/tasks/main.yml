@@ -1,51 +1,33 @@
 ---
 
-- ansible.builtin.stat:
-    path: "{{ cilium_cli_version_dest }}"
-  register: cilium_cli_version_stat
-
-- ansible.builtin.slurp:
-    path: "{{ cilium_cli_version_dest }}"
-  register: cilium_cli_version_slurp
-  when: cilium_cli_version_stat.stat.exists
-
-- ansible.builtin.debug:
-    msg: "cilium-cli: actual = {{ __cilium_cli_version }}, desired = {{ cilium_cli_version }}, upgrade = {{ cilium_cli_upgrade }}"
-
 - name: download cilium-cli archive
   ansible.builtin.get_url:
     url: "{{ cilium_cli_archive_url }}"
     dest: "{{ cilium_cli_archive_dest }}"
-    checksum: "{{ cilium_cli_archive_checksum_type }}:{{ cilium_cli_archive_checksum }}"
+    checksum: "{{ common_checksum_type }}:{{ cilium_cli_archive_checksum }}"
     owner: root
     group: root
     mode: 0644
   become: True
+  tags: [ cilium, cilium-cli ]
 
 - name: unarchive cilium-cli
   ansible.builtin.unarchive:
     src: "{{ cilium_cli_archive_dest }}"
-    dest: "{{ cilium_cli_dir }}"
+    dest: "{{ common_dir }}"
     remote_src: True
     owner: root
     group: root
     mode: 0755
   become: True
+  tags: [ cilium, cilium-cli ]
 
-- name: record installed cilium-cli version
-  ansible.builtin.copy:
-    content: "{{ __cilium_cli_version }}"
-    dest: "{{ cilium_cli_version_dest }}"
-    owner: root
-    group: root
-    mode: "0644"
-  become: True
-
-- name: template cilium profile
+- name: template cilium-cli profile
   ansible.builtin.template:
     src: cilium.profile.j2
     dest: /etc/profile.d/cilium.sh
     owner: root
     group: root
-    mode: "0644"
+    mode: 0644
   become: True
+  tags: [ cilium, cilium-cli ]

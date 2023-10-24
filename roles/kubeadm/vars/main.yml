@@ -1,19 +1,14 @@
 ---
 
-kubeadm_architecture: "{{ {
-  'aarch64': 'arm64',
-  'x86_64': 'amd64',
-} [ansible_architecture] }}"
-kubeadm_system: "{{ ansible_system | lower }}"
-kubeadm_label: stable
+# Like the other kubes
+kubeadm_url: "https://dl.k8s.io/release/v{{ kubeadm_version }}\
+  /bin/{{ common_system }}/{{ common_architecture }}/kubeadm"
 
-kubeadm_binary_url: "https://dl.k8s.io/release/v{{ __kubeadm_version }}\
-  /bin/{{ kubeadm_system }}/{{ kubeadm_architecture }}/kubeadm"
-kubeadm_binary_dest: /usr/local/bin/kubeadm
-kubeadm_binary_checksum_type: sha256
-kubeadm_binary_checksum_url: "{{ kubeadm_binary_url }}.{{ kubeadm_binary_checksum_type }}"
-kubeadm_binary_checksum: "{{ lookup('ansible.builtin.url', kubeadm_binary_checksum_url) }}"
+kubeadm_checksum_url: "{{ kubeadm_url }}.{{ common_checksum_type }}"
 
+kubeadm_checksum: "{{ lookup('ansible.builtin.url', kubeadm_checksum_url) }}"
+
+# Pre-flight checks check at least these packages on Debian
 kubeadm_packages:
   - apparmor
   - conntrack
@@ -21,16 +16,10 @@ kubeadm_packages:
   - iptables
   - socat
 
+# Pre-flight check checks these modules
 kubeadm_modules:
   - br_netfilter
 
-kubeadm_sysctl_variables:
+# This might be set automatically, but set it just in case
+kubeadm_sysctl_vars:
   net.ipv4.ip_forward: "1"
-
-kubeadm_version_dest: "{{ archives_dir }}/kubeadm.version"
-
-__kubeadm_version: "{{
-  kubeadm_version_slurp.content | b64decode
-    if not kubeadm_upgrade and kubeadm_version_stat.stat.exists
-    else kubeadm_version
-  }}"

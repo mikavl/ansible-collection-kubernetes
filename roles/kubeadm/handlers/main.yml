@@ -5,6 +5,6 @@
   become: True
   loop: "{{ kubeadm_modules }}"
 
-- name: kubeadm sysctl
+- name: kubeadm sysctl reload
   ansible.builtin.command: "sysctl -p /etc/sysctl.d/90-kubeadm.conf"
   become: True

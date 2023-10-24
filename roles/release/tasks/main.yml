@@ -8,6 +8,7 @@
     group: root
     mode: 0755
   become: True
+  tags: [ release ]
 
 - name: download release
   ansible.builtin.copy:
@@ -21,13 +22,15 @@
   loop:
     - { url: "{{ release_service_url }}", dest: "{{ release_service_dest }}" }
     - { url: "{{ release_config_url }}", dest: "{{ release_config_dest }}" }
+  tags: [ release ]
 
-- name: enable kubelet service
+- name: enable release service
   ansible.builtin.systemd:
     name: "{{ release_service_name }}"
     daemon_reload: True
     enabled: True
   become: True
+  tags: [ release ]
 
 - name: create release config dir
   ansible.builtin.file:
@@ -37,6 +40,7 @@
     group: root
     mode: 0755
   become: True
+  tags: [ release ]
 
 # Explicitly create this, otherwise non-control plane nodes might spam log
 - name: create release manifests dir
@@ -47,3 +51,4 @@
     group: root
     mode: 0700
   become: True
+  tags: [ release ]

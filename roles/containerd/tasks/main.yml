@@ -9,6 +9,7 @@
     group: root
     mode: 0644
   become: True
+  tags: [ containerd ]
 
 - name: unarchive containerd
   ansible.builtin.unarchive:
@@ -24,6 +25,7 @@
     mode: 0755
   become: True
   notify: restart containerd service
+  tags: [ containerd ]
 
 - name: download containerd service
   ansible.builtin.get_url:
@@ -35,6 +37,7 @@
     mode: 0644
   become: True
   notify: restart containerd service
+  tags: [ containerd ]
 
 - name: create containerd config dir
   ansible.builtin.file:
@@ -44,6 +47,7 @@
     group: root
     mode: 0755
   become: True
+  tags: [ containerd ]
 
 - name: configure containerd
   ansible.builtin.template:
@@ -54,6 +58,7 @@
     mode: 0644
   become: True
   notify: restart containerd service
+  tags: [ containerd ]
 
 - meta: flush_handlers
 
@@ -63,3 +68,4 @@
     state: started
     enabled: True
   become: True
+  tags: [ containerd ]

@@ -1,5 +1,5 @@
 ---
 
 dependencies:
-  - role: archives
+  - role: cache
   - role: common

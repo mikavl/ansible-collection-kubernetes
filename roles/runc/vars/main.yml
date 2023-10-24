@@ -13,4 +13,4 @@ runc_checksum: "{{ lookup(
   'ansible.builtin.url', runc_checksum_url, split_lines=False
 ) | regex_search(runc_checksum_regex, '\\1', multiline=True) }}"
 
-runc_checksum_regex: '^([a-z0-9]+)\s+runc\.{{ runc_architecture }}$'
+runc_checksum_regex: '^([a-z0-9]+)\s+runc\.{{ common_architecture }}$'

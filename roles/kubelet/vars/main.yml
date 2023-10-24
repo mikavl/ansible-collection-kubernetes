@@ -1,11 +1,10 @@
 ---
 
 # kubelet is also released as a binary download
-kubelet_url: "https://dl.k8s.io/release/v{{ kubelet_version }}\
+kubelet_url: "https://dl.k8s.io/release/v{{ kubelet_version | default(kubernetes_version) }}\
   /bin/{{ common_system }}/{{ common_architecture }}/kubelet"
 
 # Fairly straightforward
 kubelet_checksum: "{{ lookup('ansible.builtin.url', kubelet_checksum_url) }}"
 
 kubelet_checksum_url: "{{ kubelet_url }}.{{ common_checksum_type }}"
-

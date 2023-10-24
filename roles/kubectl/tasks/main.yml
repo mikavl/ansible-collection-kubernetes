@@ -9,6 +9,7 @@
     group: root
     mode: 0755
   become: True
+  tags: [ kubectl ]
 
 - name: template kubectl profile
   ansible.builtin.template:
@@ -18,3 +19,4 @@
     group: root
     mode: 0644
   become: True
+  tags: [ kubectl ]

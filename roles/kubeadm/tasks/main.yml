@@ -9,6 +9,7 @@
     group: root
     mode: 0755
   become: True
+  tags: [ kubeadm ]
 
 - name: install kubeadm packages
   ansible.builtin.apt:
@@ -18,6 +19,7 @@
     install_recommends: False
     force_apt_get: True
   become: True
+  tags: [ kubeadm ]
 
 - name: configure kubeadm modules
   ansible.builtin.template:
@@ -28,6 +30,7 @@
     mode: 0644
   become: True
   notify: kubeadm modprobe
+  tags: [ kubeadm ]
 
 - name: configure kubeadm sysctl
   ansible.builtin.template:
@@ -38,6 +41,7 @@
     mode: 0644
   become: True
   notify: kubeadm sysctl reload
+  tags: [ kubeadm ]
 
 - meta: flush_handlers
 
@@ -47,5 +51,6 @@
     dest: /etc/profile.d/kubeadm.sh
     owner: root
     group: root
-    mode:"0644
+    mode: 0644
   become: True
+  tags: [ kubeadm ]

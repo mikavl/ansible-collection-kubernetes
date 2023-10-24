@@ -1,14 +1,8 @@
 ---
 
-- name: setup kubernetes control plane node
+- import_playbook: node.yml
+
+- name: setup cilium-cli on kubernetes control plane nodes
   hosts: "{{ targets }}"
   roles:
-    - cni_plugins
-    - containerd
-    - cri_tools
-    - runc
-    - kubeadm
-    - kubectl
-    - kubelet
-    - release
     - cilium_cli

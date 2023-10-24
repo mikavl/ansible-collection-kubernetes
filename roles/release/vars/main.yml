@@ -3,10 +3,10 @@
 release_repo: kubernetes/release
 
 # Base URL for the config and service files
-release_url: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ release_version }}/cmd/kubepkg/templates/latest/deb/"
+release_url: "https://raw.githubusercontent.com/{{ release_repo }}/v{{ release_version }}/cmd/krel/templates/latest"
 
 # This is actually the kubelet service file, but use a separate role for release as it has its own cycle
-release_service_url: "{{ release_url }}/kubelet/lib/systemd/system/kubelet.service"
+release_service_url: "{{ release_url }}/kubelet/kubelet.service"
 release_service_name: "{{ release_service_url | basename }}"
 release_service_dest: /etc/systemd/system/{{ release_service_name }}
 

@@ -1,7 +1,7 @@
 ---
 
 # Like the other kubes
-kubeadm_url: "https://dl.k8s.io/release/v{{ kubeadm_version }}\
+kubeadm_url: "https://dl.k8s.io/release/v{{ kubeadm_version | default(kubernetes_version) }}\
   /bin/{{ common_system }}/{{ common_architecture }}/kubeadm"
 
 kubeadm_checksum_url: "{{ kubeadm_url }}.{{ common_checksum_type }}"

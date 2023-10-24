@@ -1,7 +1,7 @@
 ---
 
 # kubectl is a binary release too
-kubectl_url: "https://dl.k8s.io/release/v{{ kubectl_version }}\
+kubectl_url: "https://dl.k8s.io/release/v{{ kubectl_version | default(kubernetes_version) }}\
   /bin/{{ common_system }}/{{ common_architecture }}/kubectl"
 
 # Like the other kubes

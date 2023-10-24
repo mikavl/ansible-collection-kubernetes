@@ -1,0 +1,6 @@
+---
+
+ntpsec_packages:
+  - ntpsec
+
+ntpsec_service_name: ntpsec.service

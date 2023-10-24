@@ -1,0 +1,48 @@
+---
+
+- name: set timezone
+  ansible.builtin.template:
+    src: timezone.j2
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+
+- name: set localtime
+  ansible.builtin.file:
+    src: /usr/share/zoneinfo/{{ ntpsec_timezone }}
+    dest: /etc/localtime
+    state: link
+    force: True
+    follow: False
+  become: True
+
+- name: install ntpsec
+  ansible.builtin.apt:
+    name: "{{ ntpsec_packages }}"
+    state: present
+    purge: True
+    install_recommends: False
+    autoremove: True
+    update_cache: True
+  become: True
+
+- name: configure ntpsec
+  ansible.builtin.template:
+    src: ntp.conf.j2
+    dest: /etc/ntpsec/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: True
+  notify: restart ntpsec service
+
+- meta: flush_handlers
+
+- name: enable and start ntpsec service
+  ansible.builtin.systemd:
+    name: "{{ ntpsec_service_name }}"
+    state: started
+    enabled: True
+  become: True

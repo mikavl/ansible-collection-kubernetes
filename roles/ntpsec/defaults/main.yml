@@ -1,0 +1,5 @@
+---
+
+ntpsec_timezone: Etc/UTC
+
+ntpsec_servers: []

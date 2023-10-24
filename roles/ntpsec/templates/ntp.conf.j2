@@ -1,0 +1,11 @@
+driftfile /var/lib/ntpsec/ntp.drift
+leapfile /usr/share/zoneinfo/leap-seconds.list
+tos maxclock 11
+tos minclock 4 minsane 3
+
+{% for ntpsec_server in ntpsec_servers %}
+server {{ ntpsec_server }} iburst
+{% endfor %}
+
+restrict 127.0.0.1
+restrict ::1

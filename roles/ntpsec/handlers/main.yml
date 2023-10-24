@@ -1,0 +1,7 @@
+---
+
+- name: restart ntpsec service
+  ansible.builtin.systemd:
+    name: "{{ ntpsec_service_name }}"
+    state: restarted
+  become: True

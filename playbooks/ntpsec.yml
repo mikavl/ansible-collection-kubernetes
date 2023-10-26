@@ -3,4 +3,4 @@
 - name: setup ntpsec
   hosts: "{{ targets }}"
   roles:
-    - cni_plugins
+    - ntpsec

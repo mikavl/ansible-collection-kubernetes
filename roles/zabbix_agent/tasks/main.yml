@@ -51,6 +51,7 @@
     mode: "0640"
   become: True
   notify: restart zabbix-agent
+  tags: [ zabbix-agent ]
 
 - meta: flush_handlers
 

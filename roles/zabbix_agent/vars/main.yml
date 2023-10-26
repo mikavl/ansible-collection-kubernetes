@@ -1,0 +1,17 @@
+---
+
+zabbix_agent_apt_repo: "deb [signed-by={{ zabbix_agent_apt_key_path }}] https://repo.zabbix.com/zabbix/{{ zabbix_agent_version }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release | lower }} main"
+
+zabbix_agent_apt_key_url: "https://repo.zabbix.com/zabbix-official-repo.key"
+zabbix_agent_apt_key_path: /etc/apt/keyrings/{{ zabbix_agent_apt_key_url | basename | splitext | first }}.gpg
+
+zabbix_agent_required_packages:
+  - curl
+  - gnupg
+
+zabbix_agent_packages:
+  - zabbix-agent
+
+zabbix_agent_service_name: zabbix-agent.service
+
+zabbix_agent_group: zabbix

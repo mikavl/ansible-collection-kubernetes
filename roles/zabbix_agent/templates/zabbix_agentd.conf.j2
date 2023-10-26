@@ -1,0 +1,9 @@
+PidFile=/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+LogFileSize=0
+StartAgents=0
+ServerActive={{ zabbix_server }}
+{% if zabbix_agent_hostname is defined %}
+Hostname={{ zabbix_agent_hostname }}
+{% endif %}
+Include=/etc/zabbix/zabbix_agentd.conf.d/*.conf

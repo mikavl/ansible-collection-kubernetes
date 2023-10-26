@@ -1,0 +1,63 @@
+---
+
+- name: install required packages
+  ansible.builtin.apt:
+    name: "{{ zabbix_agent_required_packages }}"
+    state: present
+    update_cache: True
+    install_recommends: False
+  become: True
+  tags: [ zabbix-agent ]
+
+- name: create apt keyrings directory
+  ansible.builtin.file:
+    path: "/etc/apt/keyrings"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: True
+  tags: [ zabbix-agent ]
+
+- name: setup zabbix-agent apt key
+  ansible.builtin.shell: "curl -fsSL {{ zabbix_agent_apt_key_url | quote }} | gpg --dearmor --output {{ zabbix_agent_apt_key_path | quote }}"
+  become: True
+  args:
+    creates: "{{ zabbix_agent_apt_key_path }}"
+  tags: [ zabbix-agent ]
+
+- name: setup zabbix-agent apt repository
+  ansible.builtin.apt_repository:
+    repo: "{{ zabbix_agent_apt_repo }}"
+    filename: zabbix
+  become: True
+  tags: [ zabbix-agent ]
+
+- name: install zabbix-agent packages
+  ansible.builtin.apt:
+    name: "{{ zabbix_agent_packages }}"
+    state: present
+    install_recommends: False
+    update_cache: True
+  become: True
+  tags: [ zabbix-agent ]
+
+- name: configure zabbix-agent
+  ansible.builtin.template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agentd.conf
+    owner: root
+    group: "{{ zabbix_agent_group }}"
+    mode: "0640"
+  become: True
+  notify: restart zabbix-agent
+
+- meta: flush_handlers
+
+- name: enable and start zabbix-agent service
+  ansible.builtin.systemd:
+    name: "{{ zabbix_agent_service_name }}"
+    state: started
+    enabled: True
+  become: True
+  tags: [ zabbix-agent ]

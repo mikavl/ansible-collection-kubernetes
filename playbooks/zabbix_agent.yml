@@ -1,0 +1,6 @@
+---
+
+- name: setup zabbix-agent
+  hosts: "{{ targets }}"
+  roles:
+    - zabbix_agent

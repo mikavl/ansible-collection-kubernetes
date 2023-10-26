@@ -50,7 +50,7 @@
     group: "{{ zabbix_agent_group }}"
     mode: "0640"
   become: True
-  notify: restart zabbix-agent
+  notify: restart zabbix-agent service
   tags: [ zabbix-agent ]
 
 - meta: flush_handlers
